@@ -5,7 +5,6 @@ const Button = ({ handleClick, text }) => (
     {text}
   </button>
 )
-
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -17,19 +16,39 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.',
     'The only way to go fast, is to go well.'
   ]
+
+  //initialize votes state with 0 for each anecdote
+  const startVotes = anecdotes.reduce((acc, anecdote) => {
+    acc[anecdote] = 0;
+    return acc;
+  }, {})
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(startVotes)
 
+  //randomize anecdotes
   const randomAnecdote = () => {
     const anecdote = Math.floor(Math.random() * anecdotes.length)
     setSelected(anecdote)
   }
 
+  //save vote for the current anecdote
+  const voteAnecdote = () =>{
+    const updatedVotes = {...votes};
+    updatedVotes[anecdotes[selected]] += 1
+    setVotes(updatedVotes);
+  }
+
 
   return (
     <div>
-      {anecdotes[selected]}
+      <div>{anecdotes[selected]}</div>
       <br/>
+      <div>This anecdote has {votes[anecdotes[selected]]} votes</div>
+  
+      <br/>
+      <Button handleClick={voteAnecdote} text="Vote"></Button>
+
       <Button handleClick={randomAnecdote} text="Next anecdote"></Button>
 
     </div>
